@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -10,16 +10,35 @@ import {
   TextInput,
 } from 'react-native';
 import { color } from 'react-native-reanimated';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import auth from '../Config/Firebase'
+
+
 
 const LoginForm = ({navigation}) => {
   function screenHandler() {
     navigation.navigate('RegistrationForm');
   }
 
-  const [text, onChangeText] = React.useState('');
-  const [email, onChangeEmail] = React.useState('');
-  const [number, onChangeNumber] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null)
+
+
+const Login = ()=>{
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    navigation.replace('Store');
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorMessage);
+  });
+}
+
 
   return (
     <>
@@ -38,7 +57,7 @@ const LoginForm = ({navigation}) => {
           <TextInput
             placeholderTextColor={'#D4D3D3'}
             style={styles.input}
-            onChangeText={onChangeEmail}
+            onChangeText={(text) => setEmail(text)}
             value={email}
             placeholder="Email"
           />
@@ -52,9 +71,9 @@ const LoginForm = ({navigation}) => {
           <TextInput
             placeholderTextColor={'#D4D3D3'}
             style={styles.input}
-            onChangeText={onChangePassword}
-            value={password}
             secureTextEntry
+            onChangeText={(text) => setPassword(text)}
+            // value={password}
             placeholder="Password"
           />
           <Image
@@ -71,7 +90,7 @@ const LoginForm = ({navigation}) => {
       </SafeAreaView>
 
       <View style={styles.btnMain} >
-            <TouchableOpacity style={styles.btnSize} onPress={() => screenHandler()}>
+            <TouchableOpacity style={styles.btnSize} onPress={() => Login()}>
                 <Text style={styles.btnText}>
                     Sign Up
                 </Text>

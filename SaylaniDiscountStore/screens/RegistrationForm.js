@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,9 +8,12 @@ import {
   Pressable,
   SafeAreaView,
   TextInput,
+  Alert,
 } from 'react-native';
 import { color } from 'react-native-reanimated';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from '../Config/Firebase'
+import Store from './store';
 // let auth = getAuth();
 
 
@@ -20,40 +23,43 @@ const RegistrationForm = ({navigation}) => {
   function screenHandler() {
     navigation.navigate('LoginForm');
   }
-  const [value, setValue] = React.useState({
-    name: '',
-    number: '',
-    email: '',
-    password: '',
-    error: ''
+  // const [value, setValue] = React.useState({
+  //   name: '',
+  //   number: '',
+  //   email: '',
+  //   password: '',
+  //   error: ''
+  // })
+
+  const [name, setName] = useState(null)
+  const [number, setNumber] = useState(null)
+  const [email, setEmail] = useState(null)
+  const [password, setPassword] = useState(null)
+
+  const signUp = ()=>{
+    createUserWithEmailAndPassword(auth, email, password, name, number )
+  .then((userCredential) => {
+    // Signed in 
+    navigation.replace('Store');
+    const user = userCredential.user;
+    console.log(user);
+    // ...
   })
-
-  async function signUp() {
-    if (value.name === '' || value.number === '' || value.email === '' || value.password === '' ) {
-      setValue({
-        ...value,
-        error: 'All Fields are mandatory.'
-      })
-      return;
-    }
-
-    try {
-      await createUserWithEmailAndPassword(auth, value.name, value.number, value.email, value.password);
-      console.log(value.name);
-      navigation.navigate('Store');
-    } catch (error) {
-      setValue({
-        ...value,
-        error: error.message,
-      })
-    }
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorMessage);
+    console.log(setName);
+    
+    
+    // ..
+  });
   }
- 
   
   
 
 
-  // const [text, onChangeText] = React.useState('');
+  // const [name, onChangeText] = React.useState('');
   // const [email, onChangeEmail] = React.useState('');
   // const [number, onChangeNumber] = React.useState('');
   // const [password, onChangePassword] = React.useState('');
@@ -73,8 +79,8 @@ const RegistrationForm = ({navigation}) => {
           <TextInput
             placeholderTextColor={'#D4D3D3'}
             style={styles.input}
-            value={value.name}
-            onChangeText={(text) => setValue({ ...value, name: text })}
+            // value={value.name}
+            onChangeText={(text) => setName(text)}
             placeholder="Full Name"
           />
           <Image
@@ -87,8 +93,8 @@ const RegistrationForm = ({navigation}) => {
           <TextInput
             placeholderTextColor={'#D4D3D3'}
             style={styles.input}
-            value={value.number}
-            onChangeText={(text) => setValue({ ...value, number: text })}
+            // value={value.number}
+            onChangeText={(text) => setNumber(text)}
             placeholder="Contact"
             keyboardType="numeric"
           />
@@ -102,8 +108,8 @@ const RegistrationForm = ({navigation}) => {
           <TextInput
             placeholderTextColor={'#D4D3D3'}
             style={styles.input}
-            value={value.email}
-            onChangeText={(text) => setValue({ ...value, email: text })}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
             placeholder="Email"
           />
           <Image
@@ -116,8 +122,8 @@ const RegistrationForm = ({navigation}) => {
           <TextInput
             placeholderTextColor={'#D4D3D3'}
             style={styles.input}
-            value={value.password}
-            onChangeText={(text) => setValue({ ...value, password: text })}
+            // value={value.password}
+            onChangeText={(text) => setPassword(text)}
             secureTextEntry
             placeholder="Password"
           />

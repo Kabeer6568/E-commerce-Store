@@ -2,7 +2,7 @@
 
 import React from "react";
 import { initializeApp } from "firebase/app";
-import 'firebase/auth';
+import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC5Jw14RlSRl8kqcbaNunHG05hFzBQc0RY",
@@ -17,5 +17,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
 
-export default app;
+export default auth;
