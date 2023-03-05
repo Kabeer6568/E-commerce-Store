@@ -35,6 +35,7 @@ import FirstScreen from './screens/FirstScreen';
 import LoginForm from './screens/Login';
 import RegistrationForm from './screens/RegistrationForm';
 import Store from './screens/store';
+import AdminAccount from './screens/AdminAccount';
 
 // import DrawerNavAddition from './src/Components/DrawerNavAddition'
 
@@ -52,6 +53,7 @@ function Root() {
       <Stack.Screen name="LoginForm" component={LoginForm} options={{ headerShown: false }}/>
       <Stack.Screen name="RegistrationForm" component={RegistrationForm} options={{ headerShown: false }}/>
       <Stack.Screen name="Store" component={Store} options={{ headerShown: true }}/>
+      <Stack.Screen name="AdminAccount" component={AdminAccount} options={{ headerShown: true }}/>
     </Stack.Navigator>
     </NavigationContainer>
   );

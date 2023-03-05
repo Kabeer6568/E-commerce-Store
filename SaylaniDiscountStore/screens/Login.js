@@ -29,7 +29,17 @@ const Login = ()=>{
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    navigation.replace('Store');
+    const data = {
+      email: "admin@gmail.com"
+    }
+    
+    if (data) {
+      navigation.navigate('AdminAccount');
+    } else {
+      
+      navigation.replace('Store');
+      console.log(user);
+    }
     // ...
   })
   .catch((error) => {
